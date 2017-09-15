@@ -1,30 +1,36 @@
 %% Input: UncompressedText.txt
 %% Output: CompressedText.txt && Compression Ratio
+clear
 fileID1 = fopen('UncompressedText.txt','r');
 fileID2 = fopen('CompressedText.txt','w');
-comp_r = 1
-unco = fread(fileID1);
-comp = unco;
-fwrite(fileID2,comp);
-disp('Compression Ratio is: '+ num2str(comp_r));
+comp_r = 1;
+UNCO = fread(fileID1,'*char');
+unco = UNCO;
 %% ROUTINE LZW_COMP
+stri = unco(1);
+cw = stri;
+unco(1) = [];
 
-if 0
-%% LZW Compression code
-% in: input charactor
-% out: codeword
-stri = in.pop()
-out = []
-while ~isEmpty(string)
-	char = im.pop()
-	comb = stri+char
-	if comb is in s_table
-		stri = comb
-	else
-		out.push(cw(stri))
-		s_table << comb
-		stri = char
+out = [];
+%% init the default list
+s_table = num2cell(0:255);
+while length(unco)
+	char = unco(1);  unco(1)=[];
+	comb = [stri, char];
+    idx = find(strcmp(comb, s_table));
+	if length(idx)
+		stri = comb;
+        cw = idx-1; % start from 0
+    else        
+		out(end+1) = cw;
+		s_table{end+1} = comb;
+		stri = char;
+        cw = char;
 	end
 end
-out.push(cw(stri))
-end
+out(end+1) = cw;
+%% save
+comp = out;
+comp_r = length(comp)/length(UNCO)*1.5;
+fwrite(fileID2,comp,'ubit12');
+disp(['Compression Ratio is: ', num2str(comp_r)]);
