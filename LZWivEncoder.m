@@ -31,6 +31,7 @@ out(end+1) = cw;
 %% save
 comp = out;
 bits = ceil(log(max(comp))/log(2));
-comp_r = length(comp)/length(UNCO)*(bits/8);
+comp_r = (length(comp)*bits+8)/(length(UNCO)*8);
+fwrite(fileID2,bits);
 fwrite(fileID2,comp,['ubit',num2str(bits)]);
 disp(['Compression Ratio is: ', num2str(comp_r)]);
