@@ -3,9 +3,8 @@
 clear
 fileID1 = fopen('UncompressedText.txt','r');
 fileID2 = fopen('CompressedText.txt','w');
-comp_r = 1;
-UNCO = fread(fileID1,'*char');
-unco = UNCO;
+UNCO = fread(fileID1,'ubit4');
+unco = char(UNCO);
 %% ROUTINE LZW_COMP
 stri = unco(1);
 cw = stri;
@@ -31,6 +30,7 @@ end
 out(end+1) = cw;
 %% save
 comp = out;
-comp_r = length(comp)/length(UNCO)*1.5;
-fwrite(fileID2,comp,'ubit12');
+bits = ceil(log(max(comp))/log(2));
+comp_r = length(comp)/length(UNCO)*(bits/8);
+fwrite(fileID2,comp,['ubit',num2str(bits)]);
 disp(['Compression Ratio is: ', num2str(comp_r)]);
