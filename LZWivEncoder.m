@@ -3,7 +3,7 @@
 clear
 fileID1 = fopen('UncompressedText.txt','r');
 fileID2 = fopen('CompressedText.txt','w');
-UNCO = fread(fileID1,'ubit4');
+UNCO = fread(fileID1,'ubit8');
 unco = char(UNCO);
 %% ROUTINE LZW_COMP
 stri = unco(1);
